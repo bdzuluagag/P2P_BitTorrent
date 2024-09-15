@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package peer;
+
+option go_package = "/pb";
+
+
+// Servicio para el Tracker, que maneja la conexión y gestión de los nodos.
+service TrackerService {
+  // Unirse a la red, ya sea para subir o descargar un archivo.
+  rpc JoinNetwork(JoinRequest) returns (JoinResponse);
+  
+  // Salir de la red.
+  rpc LeaveNetwork(LeaveRequest) returns (LeaveResponse);
+  
+  // Solicitar la lista de nodos que tienen los chunks de un archivo.
+  rpc GetFileNodes(FileRequest) returns (FileNodesResponse);
+
+  // Manejar la subida de un archivo, fragmentar y distribuir chunks.
+  rpc PutFile(PutRequest) returns (PutResponse);
+}
+
+// Servicio para los nodos que manejan la subida y descarga de archivos.
+service NodeService {
+  // Solicitar un chunk de un archivo a otro nodo.
+  rpc RequestChunk(ChunkRequest) returns (ChunkResponse);
+  
+  // Enviar un chunk de un archivo a otro nodo.
+  rpc SendChunk(ChunkSendRequest) returns (ChunkSendResponse);
+}
+
+// Mensajes usados en el TrackerService.
+message JoinRequest {
+  string node_id = 1;          // Identificador único del nodo.
+  string action = 2;           // Acción: "get" para obtener o "put" para subir un archivo.
+  string file_name = 3;        // Nombre del archivo (necesario para ambas acciones).
+  int32 file_size_mb = 4;      // Tamaño del archivo en MB (necesario solo para put).
+}
+
+message JoinResponse {
+  string message = 1;          // Mensaje de confirmación o error.
+  repeated string node_list = 2; // Lista de nodos a los que debe conectarse para el archivo.
+}
+
+message LeaveRequest {
+  string node_id = 1;          // Identificador del nodo que quiere salir.
+}
+
+message LeaveResponse {
+  string message = 1;          // Mensaje de confirmación o error.
+}
+
+message FileRequest {
+  string file_name = 1;        // Nombre del archivo que se desea obtener.
+}
+
+message FileNodesResponse {
+  repeated string node_ids = 1; // Lista de nodos que poseen los chunks del archivo.
+}
+
+// Solicitud para subir un archivo.
+message PutRequest {
+  string file_name = 1;        // Nombre del archivo.
+  bytes file_data = 2;         // Contenido del archivo.
+}
+
+message PutResponse {
+  string message = 1;          // Mensaje de confirmación de subida.
+}
+
+message ChunkRequest {
+  string chunk_id = 1; // Identificador del chunk solicitado
+  string node_id = 2;  // Identificador del nodo solicitante
+}
+
+message ChunkResponse {
+  string message = 1;  // Mensaje de confirmación
+  bytes chunk_data = 2; // Los datos del chunk (simulado)
+}
+
+message ChunkSendRequest {
+  string chunk_id = 1; // Identificador del chunk enviado
+  string to_node_id = 2; // Nodo destino
+}
+
+message ChunkSendResponse {
+  string message = 1; // Mensaje de confirmación
+}
