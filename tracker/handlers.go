@@ -56,4 +56,5 @@ func (s *trackerServer) handleGet(fileName string) (*pb.JoinResponse, error) {
 		Message:  fmt.Sprintf("Nodos encontrados para los chunks del archivo %s", fileName),
 		ChunkMap: chunkMap, // Enviamos el mapa de chunks y nodos asociados
 	}, nil
+
 }

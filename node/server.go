@@ -74,4 +74,5 @@ func (s *nodeServer) StoreChunk(ctx context.Context, req *pb.StoreChunkRequest) 
 	return &pb.StoreChunkResponse{
 		Message: fmt.Sprintf("Chunk %s almacenado correctamente", req.ChunkId),
 	}, nil
+
 }

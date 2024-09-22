@@ -213,4 +213,5 @@ func handleLeave(client pb.TrackerServiceClient, nodeID string) {
 	}
 
 	fmt.Println(res.Message)
+
 }

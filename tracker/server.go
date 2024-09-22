@@ -76,6 +76,7 @@ func (s *trackerServer) LeaveNetwork(ctx context.Context, req *pb.LeaveRequest) 
 		} else {
 			delete(s.fileChunks, chunkID)
 		}
+
 	}
 
 	// Eliminar el nodo de la lista de nodos activos

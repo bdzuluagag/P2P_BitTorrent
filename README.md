@@ -1,111 +1,179 @@
-¡Perfecto! Vamos a definir un plan detallado y paso a paso para implementar tu proyecto en Go utilizando gRPC, asegurándonos de mantener la arquitectura simplificada que refleje el funcionamiento de un sistema P2P similar a BitTorrent.
+# P2P File Sharing System with gRPC, Replication & Fault Tolerance 🚀
 
-### **Paso a Paso para Implementar el Proyecto**
+Welcome to the **P2P File Sharing System**, a fully decentralized and distributed peer-to-peer (P2P) network built using **Go**, **gRPC**, and **Protobuf**. This project simulates the core functionality of the BitTorrent protocol, including file sharing with chunk replication, fault tolerance, and a central tracker.
 
-### **Fase 1: Diseño y Configuración Inicial**
+## 🎯 Project Features
 
-1. **Definir la Estructura del Proyecto**
-   - Crear una estructura de directorios organizada para el código:
-     ```
-     - /project-root
-       - /proto  (para los archivos .proto de gRPC)
-       - /tracker (para el código del tracker)
-       - /node (para el código de los nodos)
-       - /shared (código compartido como estructuras y utilidades)
-     ```
-   
-2. **Definir los Servicios gRPC con Protocol Buffers (.proto)**
-   - Crear un archivo `.proto` que defina los servicios y mensajes para la comunicación entre nodos y el tracker.
-   - Definir dos servicios principales:
-     - `TrackerService` para manejar las operaciones del tracker.
-     - `NodeService` para manejar las operaciones del PServidor.
+- **Decentralized P2P Network**: Each node in the network acts as both a client and a server, enabling efficient file sharing.
+- **Tracker**: A central service that manages the list of nodes, tracks files, and stores information about which nodes hold chunks of each file.
+- **Chunk-Based File Distribution**: Files are divided into chunks for efficient distribution across multiple nodes.
+- **Replication**: Each chunk is replicated across multiple nodes to ensure availability and fault tolerance.
+- **Fault Tolerance**: If a node goes offline, the file can still be reconstructed using the replicated chunks from other nodes.
+- **gRPC Communication**: Nodes communicate via **gRPC**, ensuring efficient and scalable communication between peers and the tracker.
+- **Built-in Commands**: Each node allows you to perform operations like uploading, downloading, and leaving the network through simple commands.
 
-3. **Generar Código gRPC en Go**
-   - Utilizar `protoc` para generar el código Go necesario para gRPC a partir de los archivos `.proto`.
+## 🛠️ Technologies Used
 
-### **Fase 2: Implementación del Tracker**
-
-4. **Desarrollar el Tracker (TrackerService)**
-   - Implementar el tracker como un servicio centralizado que:
-     - Mantiene una lista de nodos en la red.
-     - Administra los fragmentos de archivos y su distribución.
-     - Gestiona las solicitudes de ingreso (`get` o `put`) de nuevos nodos.
-     - Fragmenta los archivos en chunks de 1MB y distribuye los chunks a los nodos cuando se hace un `put(file)`.
-
-5. **Implementar Métodos del Tracker**
-   - **join()**: Registra un nuevo nodo en la red y lo asocia con los fragmentos que posee.
-   - **leave()**: Elimina un nodo de la red cuando decide desconectarse.
-   - **handlePut()**: Fragmenta un archivo en chunks de 1MB y distribuye los chunks entre los nodos de la red.
-   - **handleGet()**: Responde con una lista de nodos que tienen los chunks de un archivo solicitado para que el nodo cliente pueda descargarlos.
-
-### **Fase 3: Implementación del Nodo (PCliente y PServidor)**
-
-6. **Desarrollar el Nodo (NodeService)**
-   - Implementar el nodo con dos módulos: `PCliente` y `PServidor`.
-   - **PCliente**:
-     - `put(file)`: Envía una solicitud al tracker para ingresar a la red con un archivo a compartir.
-     - `get(file)`: Envía una solicitud al tracker para obtener nodos que poseen los fragmentos del archivo deseado.
-     - `leave()`: Solicita al tracker la eliminación del nodo de la red.
-   - **PServidor**:
-     - `handlePut()`: Maneja solicitudes entrantes para almacenar fragmentos de archivos.
-     - `handleGet()`: Maneja solicitudes entrantes para enviar fragmentos de archivos.
-
-7. **Implementar Conexiones gRPC entre Nodos**
-   - Configurar el servidor gRPC en cada nodo que escuche solicitudes desde otros nodos.
-   - Implementar el cliente gRPC en cada nodo para realizar solicitudes a otros nodos y al tracker.
-
-### **Fase 4: Implementación de la Lógica de Distribución y Transferencia**
-
-8. **Lógica de Fragmentación y Distribución de Chunks**
-   - Desarrollar la lógica en el tracker para fragmentar archivos y distribuir chunks de manera eficiente entre los nodos.
-   - Implementar un algoritmo de distribución, como round-robin o basado en disponibilidad de nodos, para asignar chunks.
-
-9. **Transferencia Simulada de Chunks (Servicios ECO/Dummy)**
-   - Implementar una simulación de transferencia de datos utilizando servicios gRPC que envían y reciben mensajes sin transferir datos reales (solo la arquitectura).
-
-### **Fase 5: Pruebas y Validación**
-
-10. **Pruebas Locales**
-    - Realizar pruebas en un entorno local con múltiples nodos y el tracker ejecutándose simultáneamente.
-    - Simular operaciones `get` y `put` para verificar que los nodos se conectan correctamente, los archivos se fragmentan y distribuyen, y que los nodos pueden unirse y dejar la red.
-
-11. **Pruebas de Resiliencia y Tolerancia a Fallos**
-    - Probar la capacidad del sistema para manejar la salida inesperada de nodos y la reubicación de fragmentos cuando sea necesario.
-
-### **Fase 6: Documentación y Ajustes Finales**
-
-12. **Documentar el Código y Especificaciones**
-    - Completar la documentación del código y agregar comentarios explicativos.
-    - Crear un archivo `README.md` con instrucciones claras sobre cómo ejecutar el proyecto y cómo funciona cada componente.
-
-13. **Ajustes Finales y Optimización**
-    - Realizar ajustes en la lógica de distribución si se encuentran problemas de balanceo de carga o distribución ineficiente.
-    - Optimizar el uso de goroutines y canales en Go para mejorar la concurrencia y el manejo de múltiples conexiones.
-
-### **Desglose de Tareas Específicas para la Implementación**
-
-**Tarea 1: Creación de Archivos .proto**
-
-- Define los mensajes y servicios para `TrackerService` y `NodeService`.
+- **Go (Golang)**: Main programming language for the P2P system.
+- **gRPC**: Enables efficient communication between peers and the tracker.
+- **Protocol Buffers (Protobuf)**: For serializing structured data.
+- **Amazon EC2**: For deploying and running the system in a real-world environment.
   
-**Tarea 2: Implementación del Tracker**
+## 📁 Project Structure
 
-- Crear el archivo `tracker.go` con la lógica del tracker.
-- Implementar el manejo de fragmentos y la lista de nodos.
+```bash
+.
+├── tracker/                     # Tracker server that manages the nodes and file chunks
+│   ├── server.go                # Tracker service implementation
+│   ├── handlers.go              # Request handlers for the tracker
+│   └── utils.go                 # Utility functions for the tracker
+├── node/                        # Peer-to-peer nodes (client & server combined)
+│   ├── server.go                # Server-side implementation of the node
+│   └── utils.go                 # Utility functions for the node
+├── proto/
+│   └── peer.proto               # Protobuf definitions for the gRPC services
+└── README.md                    # This README file
+```
 
-**Tarea 3: Implementación del Nodo (PCliente y PServidor)**
+## 📦 Setup and Installation
 
-- Crear `node.go` y definir la lógica para el cliente y servidor.
-- Configurar las conexiones gRPC y los métodos de comunicación.
+### Prerequisites
 
-**Tarea 4: Simulación de Transferencia de Archivos**
+- **Go 1.16+** installed on your machine.
+- **gRPC** and **Protocol Buffers** tools installed.
 
-- Implementar funciones dummy para simular el envío y recepción de chunks.
+### 1. Clone the Repository
 
-**Tarea 5: Pruebas y Validación**
+```bash
+git clone https://github.com/bdzuluagag/P2P_BitTorrent.git
+cd P2P_BitTorrent
+```
 
-- Desarrollar un conjunto de pruebas para validar que el sistema funciona según lo esperado.
+### 2. Install Dependencies
+
+Install **gRPC** and **Protocol Buffers** plugins for Go:
+
+```bash
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+```
+
+### 3. Compile Protobuf Files
+
+In the root of the project, compile the `.proto` files:
+
+```bash
+protoc --go_out=. --go-grpc_out=. proto/peer.proto
+```
+
+### 4. Run the Tracker
+
+The tracker is the central service that manages the nodes and tracks which chunks of files are stored in each node.
+
+```bash
+cd cmd
+go run tracker/tracker.go
+```
+
+The tracker will start on port `50051`.
+
+### 5. Start Peer Nodes
+
+Each node in the network can act as both a client and a server. Start a node on a specific port:
+
+```bash
+cd cmd
+go run node/node.go
+```
+
+When prompted, enter a port number for the node (e.g., `50001`, `50002`).
+
+### 6. Upload and Download Files
+
+Each node can perform the following actions:
+
+- **Put (Upload a file)**:
+   ```bash
+   put example.txt 10
+   ```
+   This will upload `example.txt` (which has a size of 10 MB), split it into chunks, and distribute it across available nodes.
+
+- **Get (Download a file)**:
+   ```bash
+   get example.txt
+   ```
+   This will download all chunks of `example.txt` from the nodes, reconstruct the file, and store it locally.
+
+- **Leave the network**:
+   ```bash
+   leave
+   ```
+
+## 🚀 Features Overview
+
+### 1. **Join/Leave Network**
+- When a node joins the network (through the `put` or `get` commands), it registers itself with the tracker. The tracker assigns chunks of files to nodes and updates its internal list.
+- If a node leaves the network (via the `leave` command), the tracker removes it from the node list and updates its internal list.
+
+### 2. **File Distribution and Replication**
+- Files are split into chunks, and each chunk is replicated across multiple nodes to ensure redundancy.
+- The default replication factor is 3, ensuring that each chunk is stored in 3 different nodes for fault tolerance.
+
+### 3. **Fault Tolerance**
+- If a node goes offline, other nodes that hold replicated chunks can serve the data.
+- The tracker ensures that all file chunks remain available even if some nodes leave the network.
+
+### 4. **gRPC Communication**
+- Nodes communicate with each other and with the tracker using **gRPC** for efficient and scalable communication.
+- All communication, including file uploads, downloads, and chunk transfers, is handled through gRPC requests and responses.
+
+## 🧪 Example Usage
+
+1. Start the tracker:
+
+```bash
+cd cmd
+go run tracker/tracker.go
+```
+
+2. Start 3 peer nodes:
+
+```bash
+cd cmd
+go run node/node.go
+# Ingresar puerto: 50001
+
+cd cmd
+go run node/node.go
+# Ingresar puerto: 50002
+
+cd cmd
+go run node/node.go
+# Ingresar puerto: 50003
+```
+
+3. Upload a file from one of the nodes:
+
+```bash
+put shakira.mp3 10
+```
+
+4. Download the file from another node:
+
+```bash
+get shakira.mp3
+```
+
+## 🔧 Troubleshooting
+
+- **Node Not Connecting:** Verify that the ports (`50000-50010`) are open and that the tracker is running on port `50051`.
+
+## 🌟 Contributing
+
+Feel free to submit issues or pull requests if you find any bugs or want to improve the project. Contributions are welcome!
 
 ---
 
-Esta planificación nos guiará en la implementación del proyecto paso a paso. Vamos a empezar con la **Fase 1: Diseño y Configuración Inicial**, específicamente definiendo el archivo `.proto` con los servicios y mensajes que necesitaremos. ¿Quieres que comencemos con esto?
+🎉 **Thank you for checking out our P2P File Sharing System!** 🎉
+
+---

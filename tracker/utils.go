@@ -50,7 +50,6 @@ func contains(nodes []string, node string) bool {
 	return false
 }
 
-
 // isValidChunk valida que chunkID pertenezca exactamente al archivo solicitado
 func isValidChunk(fileName, chunkID string) bool {
 	// Verificar si chunkID comienza con fileName seguido de un guion y un número
@@ -71,4 +70,5 @@ func isNumeric(s string) bool {
 		}
 	}
 	return true
+
 }
