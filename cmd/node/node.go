@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"strings"
 
@@ -26,14 +25,8 @@ func main() {
 	var nodePort string
 	fmt.Scanln(&nodePort)
 
-	// Separar la IP del puerto
-	_, port, err := net.SplitHostPort(nodePort)
-	if err != nil {
-		log.Fatalf("Error al separar la dirección IP y el puerto: %v", err)
-	}
-
 	// Inicia el servidor gRPC del nodo para manejar solicitudes de otros nodos
-	go node.StartNodeServer(port)
+	go node.StartNodeServer(nodePort)
 
 	// Conectar al tracker
 	conn, err := grpc.Dial(trackerAddress, grpc.WithInsecure())

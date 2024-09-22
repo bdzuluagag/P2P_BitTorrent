@@ -26,7 +26,14 @@ func newNodeServer() *nodeServer {
 }
 
 // startNodeServer inicia el servidor gRPC del nodo
-func StartNodeServer(port string) {
+func StartNodeServer(nodeID string) {
+
+	// Separar la IP del puerto
+	_, port, err := net.SplitHostPort(nodeID)
+	if err != nil {
+		log.Fatalf("Error al separar la dirección IP y el puerto: %v", err)
+	}
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port)) // Asigna un puerto específico para cada nodo basado en su ID
 	if err != nil {
 		log.Fatalf("Error al iniciar el servidor del nodo: %v", err)
