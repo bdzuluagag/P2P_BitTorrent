@@ -43,14 +43,6 @@ This project consists of implementing a P2P file-sharing network based on the Bi
   - Protocol Buffers for efficient data serialization.
   - Concurrency through Go routines for handling multiple requests simultaneously.
   
-### References
-- ChatGPT (for conceptual guidance).
-- [gRPC Introduction](https://grpc.io/docs/what-is-grpc/introduction/)
-- [gRPC Core Concepts](https://grpc.io/docs/what-is-grpc/core-concepts/)
-- [YouTube Video on gRPC in Go](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
-- [YouTube Video on P2P Networks](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
-
----
 
 ## 🎯 Project Features
 
@@ -244,3 +236,9 @@ Feel free to submit issues or pull requests if you find any bugs or want to impr
 
 🎉 **Thank you for checking out our P2P File Sharing System!** 🎉
 ```
+### References
+- ChatGPT (for conceptual guidance).
+- [gRPC Introduction](https://grpc.io/docs/what-is-grpc/introduction/)
+- [gRPC Core Concepts](https://grpc.io/docs/what-is-grpc/core-concepts/)
+- [YouTube Video on gRPC in Go](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
+- [YouTube Video on P2P Networks](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
