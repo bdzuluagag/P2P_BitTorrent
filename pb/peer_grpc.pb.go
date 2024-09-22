@@ -248,7 +248,7 @@ var TrackerService_ServiceDesc = grpc.ServiceDesc{
 
 const (
 	NodeService_RequestChunk_FullMethodName = "/peer.NodeService/RequestChunk"
-	NodeService_SendChunk_FullMethodName    = "/peer.NodeService/SendChunk"
+	NodeService_StoreChunk_FullMethodName   = "/peer.NodeService/StoreChunk"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -259,8 +259,8 @@ const (
 type NodeServiceClient interface {
 	// Solicitar un chunk de un archivo a otro nodo.
 	RequestChunk(ctx context.Context, in *ChunkRequest, opts ...grpc.CallOption) (*ChunkResponse, error)
-	// Enviar un chunk de un archivo a otro nodo.
-	SendChunk(ctx context.Context, in *ChunkSendRequest, opts ...grpc.CallOption) (*ChunkSendResponse, error)
+	// Solicitud para almacenar un chunk
+	StoreChunk(ctx context.Context, in *StoreChunkRequest, opts ...grpc.CallOption) (*StoreChunkResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -281,10 +281,10 @@ func (c *nodeServiceClient) RequestChunk(ctx context.Context, in *ChunkRequest, 
 	return out, nil
 }
 
-func (c *nodeServiceClient) SendChunk(ctx context.Context, in *ChunkSendRequest, opts ...grpc.CallOption) (*ChunkSendResponse, error) {
+func (c *nodeServiceClient) StoreChunk(ctx context.Context, in *StoreChunkRequest, opts ...grpc.CallOption) (*StoreChunkResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ChunkSendResponse)
-	err := c.cc.Invoke(ctx, NodeService_SendChunk_FullMethodName, in, out, cOpts...)
+	out := new(StoreChunkResponse)
+	err := c.cc.Invoke(ctx, NodeService_StoreChunk_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -299,8 +299,8 @@ func (c *nodeServiceClient) SendChunk(ctx context.Context, in *ChunkSendRequest,
 type NodeServiceServer interface {
 	// Solicitar un chunk de un archivo a otro nodo.
 	RequestChunk(context.Context, *ChunkRequest) (*ChunkResponse, error)
-	// Enviar un chunk de un archivo a otro nodo.
-	SendChunk(context.Context, *ChunkSendRequest) (*ChunkSendResponse, error)
+	// Solicitud para almacenar un chunk
+	StoreChunk(context.Context, *StoreChunkRequest) (*StoreChunkResponse, error)
 	mustEmbedUnimplementedNodeServiceServer()
 }
 
@@ -314,8 +314,8 @@ type UnimplementedNodeServiceServer struct{}
 func (UnimplementedNodeServiceServer) RequestChunk(context.Context, *ChunkRequest) (*ChunkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestChunk not implemented")
 }
-func (UnimplementedNodeServiceServer) SendChunk(context.Context, *ChunkSendRequest) (*ChunkSendResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendChunk not implemented")
+func (UnimplementedNodeServiceServer) StoreChunk(context.Context, *StoreChunkRequest) (*StoreChunkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StoreChunk not implemented")
 }
 func (UnimplementedNodeServiceServer) mustEmbedUnimplementedNodeServiceServer() {}
 func (UnimplementedNodeServiceServer) testEmbeddedByValue()                     {}
@@ -356,20 +356,20 @@ func _NodeService_RequestChunk_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _NodeService_SendChunk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChunkSendRequest)
+func _NodeService_StoreChunk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoreChunkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NodeServiceServer).SendChunk(ctx, in)
+		return srv.(NodeServiceServer).StoreChunk(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: NodeService_SendChunk_FullMethodName,
+		FullMethod: NodeService_StoreChunk_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NodeServiceServer).SendChunk(ctx, req.(*ChunkSendRequest))
+		return srv.(NodeServiceServer).StoreChunk(ctx, req.(*StoreChunkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -386,8 +386,8 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NodeService_RequestChunk_Handler,
 		},
 		{
-			MethodName: "SendChunk",
-			Handler:    _NodeService_SendChunk_Handler,
+			MethodName: "StoreChunk",
+			Handler:    _NodeService_StoreChunk_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
