@@ -26,8 +26,8 @@ func newNodeServer() *nodeServer {
 }
 
 // startNodeServer inicia el servidor gRPC del nodo
-func StartNodeServer(nodeID string) {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", nodeID[10:])) // Asigna un puerto específico para cada nodo basado en su ID
+func StartNodeServer(port string) {
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port)) // Asigna un puerto específico para cada nodo basado en su ID
 	if err != nil {
 		log.Fatalf("Error al iniciar el servidor del nodo: %v", err)
 	}
@@ -36,7 +36,7 @@ func StartNodeServer(nodeID string) {
 	node := newNodeServer()
 	pb.RegisterNodeServiceServer(s, node)
 
-	log.Printf("Nodo escuchando en %s...", nodeID)
+	log.Printf("Nodo escuchando en %s...", port)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Error al correr el servidor del nodo: %v", err)
 	}

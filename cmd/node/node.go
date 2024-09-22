@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"strings"
 
@@ -15,7 +16,7 @@ import (
 )
 
 const (
-	trackerAddress = "localhost:50051" // Dirección y puerto del tracker
+	trackerAddress = "34.198.140.82:50051" // Dirección y puerto del tracker
 )
 
 // Función principal del nodo
@@ -25,8 +26,14 @@ func main() {
 	var nodePort string
 	fmt.Scanln(&nodePort)
 
+	// Separar la IP del puerto
+	_, port, err := net.SplitHostPort(nodePort)
+	if err != nil {
+		log.Fatalf("Error al separar la dirección IP y el puerto: %v", err)
+	}
+
 	// Inicia el servidor gRPC del nodo para manejar solicitudes de otros nodos
-	go node.StartNodeServer(nodePort)
+	go node.StartNodeServer(port)
 
 	// Conectar al tracker
 	conn, err := grpc.Dial(trackerAddress, grpc.WithInsecure())
