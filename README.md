@@ -2,6 +2,56 @@
 
 Welcome to the **P2P File Sharing System**, a fully decentralized and distributed peer-to-peer (P2P) network built using **Go**, **gRPC**, and **Protobuf**. This project simulates the core functionality of the BitTorrent protocol, including file sharing with chunk replication, fault tolerance, and a central tracker.
 
+## 📚 Project Details
+
+- **Course Name:** ST0263
+- **Students:**
+  - Brayan Zuluaga Giraldo: bdzuluagag@eafit.edu.co
+  - Sofia Mendieta Marin: smendietam@eafit.edu.co
+- **Professor:** Juan Carlos Montoya Mendoza: jcmontoy@eafit.edu.co
+
+### 1. Brief Description of the Activity
+
+This project consists of implementing a P2P file-sharing network based on the BitTorrent protocol using Go, gRPC, and Docker. The system ensures fault tolerance through chunk replication across multiple nodes, and a central tracker manages node connections and chunk distribution.
+
+#### 1.1. Aspects Fulfilled or Developed
+- **Functional requirements:**
+  - Decentralized P2P file sharing.
+  - File fragmentation into chunks.
+  - Chunk replication for fault tolerance.
+  - gRPC-based communication between nodes and the tracker.
+  - Commands to upload, download, and leave the network.
+  
+- **Non-functional requirements:**
+  - Fault tolerance via chunk replication.
+  - Efficient gRPC communication.
+  
+#### 1.2. Aspects NOT Fulfilled or Developed
+- **Non-functional requirement not fulfilled:**
+  - Docker integration is pending (could be added in future improvements).
+
+### 2. General Information about the Design
+- **High-Level Design:** The system consists of a central tracker that manages the list of active nodes and the chunks of files they store. Each node is both a client and a server, allowing efficient P2P file transfers. Nodes communicate with the tracker to join or leave the network and exchange file chunks using gRPC.
+- **IP of the Tracker:** `34.198.140.82`
+  
+- **Architectural Patterns:**
+  - **Client-Server Pattern:** Nodes act as both clients and servers.
+  - **Master-Slave Pattern:** The tracker acts as a master managing the nodes (slaves) and directing file chunk distribution.
+
+- **Best Practices Used:**
+  - Modularized code with clear separation of concerns (tracker, node, utilities).
+  - Protocol Buffers for efficient data serialization.
+  - Concurrency through Go routines for handling multiple requests simultaneously.
+  
+### References
+- ChatGPT (for conceptual guidance).
+- [gRPC Introduction](https://grpc.io/docs/what-is-grpc/introduction/)
+- [gRPC Core Concepts](https://grpc.io/docs/what-is-grpc/core-concepts/)
+- [YouTube Video on gRPC in Go](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
+- [YouTube Video on P2P Networks](https://youtu.be/cSGBbwvW1y4?si=7mCB27r8Xivvjk58)
+
+---
+
 ## 🎯 Project Features
 
 - **Decentralized P2P Network**: Each node in the network acts as both a client and a server, enabling efficient file sharing.
@@ -18,7 +68,7 @@ Welcome to the **P2P File Sharing System**, a fully decentralized and distribute
 - **gRPC**: Enables efficient communication between peers and the tracker.
 - **Protocol Buffers (Protobuf)**: For serializing structured data.
 - **Amazon EC2**: For deploying and running the system in a real-world environment.
-  
+
 ## 📁 Project Structure
 
 ```bash
@@ -37,11 +87,6 @@ Welcome to the **P2P File Sharing System**, a fully decentralized and distribute
 
 ## 📦 Setup and Installation
 
-### Prerequisites
-
-- **Go 1.16+** installed on your machine.
-- **gRPC** and **Protocol Buffers** tools installed.
-
 ### 1. Clone the Repository
 
 ```bash
@@ -51,12 +96,33 @@ cd P2P_BitTorrent
 
 ### 2. Install Dependencies
 
+```bash
+sudo apt-get update
+```
+```bash
+sudo apt-get install golang-go -y
+```
+
 Install **gRPC** and **Protocol Buffers** plugins for Go:
+
+```bash
+sudo apt-get install git gcc make unzip -y
+curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip
+unzip protoc-3.19.1-linux-x86_64.zip -d $HOME/protoc
+sudo mv $HOME/protoc/bin/protoc /usr/local/bin
+sudo mv $HOME/protoc/include/* /usr/local/include/
+```
 
 ```bash
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 ```
+```bash
+echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+echo 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+
 
 ### 3. Compile Protobuf Files
 
@@ -158,6 +224,8 @@ go run node/node.go
 put shakira.mp3 10
 ```
 
+
+
 4. Download the file from another node:
 
 ```bash
@@ -175,5 +243,4 @@ Feel free to submit issues or pull requests if you find any bugs or want to impr
 ---
 
 🎉 **Thank you for checking out our P2P File Sharing System!** 🎉
-
----
+```
