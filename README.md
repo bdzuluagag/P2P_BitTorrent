@@ -176,6 +176,7 @@ Each node can perform the following actions:
 ### 2. **File Distribution and Replication**
 - Files are split into chunks, and each chunk is replicated across multiple nodes to ensure redundancy.
 - The default replication factor is 3, ensuring that each chunk is stored in 3 different nodes for fault tolerance.
+- Both fragmentation and replication are handled using an availability-based algorithm. The system identifies the node with the fewest stored chunks and stores the new chunk there. During replication, the algorithm ensures that no two identical chunks are stored on the same node, maintaining distribution across the network.
 
 ### 3. **Fault Tolerance**
 - If a node goes offline, other nodes that hold replicated chunks can serve the data.
@@ -235,7 +236,7 @@ Feel free to submit issues or pull requests if you find any bugs or want to impr
 ---
 
 🎉 **Thank you for checking out our P2P File Sharing System!** 🎉
-```
+
 ### References
 - ChatGPT (for conceptual guidance).
 - [gRPC Introduction](https://grpc.io/docs/what-is-grpc/introduction/)
