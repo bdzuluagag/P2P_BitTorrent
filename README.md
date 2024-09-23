@@ -37,6 +37,7 @@ This project consists of implementing a P2P file-sharing network based on the Bi
 - **Architectural Patterns:**
   - **Client-Server Pattern:** Nodes act as both clients and servers.
   - **Master-Slave Pattern:** The tracker acts as a master managing the nodes (slaves) and directing file chunk distribution.
+  - **Microservices Pattern:** The system is built as a set of loosely coupled services, where each node functions as an independent microservice that can be scaled and managed separately.
 
 - **Best Practices Used:**
   - Modularized code with clear separation of concerns (tracker, node, utilities).
